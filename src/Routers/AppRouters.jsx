@@ -6,8 +6,6 @@ import MyOrder from "../Pages/MyOrder";
 import NotFound from "../Pages/NotFound";
 import SignIn from "../Pages/SignIn";
 
-// ... otros imports de páginas
-
 const AppRouters = () => {
   let routers = useRoutes([
     { path: "/", element: <Home /> },

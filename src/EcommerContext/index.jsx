@@ -1,13 +1,20 @@
-const EcommerContext = React.createContext();
+import { useState, createContext } from "react";
+import PropTypes from "prop-types";
+
+const EcommerContext = createContext();
 
 const EcommerProviner = ({ children }) => {
-  // Tu lógica del contexto aquí (ejemplo: estado del carrito, funciones, etc.)
+  const [navbarActi, setNavbarActi] = useState(false);
 
   return (
-    <EcommerContext.Provider value={/* tu valor del contexto aquí */}>
+    <EcommerContext.Provider value={{ navbarActi, setNavbarActi }}>
       {children}
     </EcommerContext.Provider>
   );
+};
+
+EcommerProviner.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export { EcommerContext, EcommerProviner };
