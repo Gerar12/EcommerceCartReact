@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import {
   FaShoppingCart,
@@ -17,12 +17,24 @@ import "./navbar.css";
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const activeStyle = "underline underline-offset-4 text-yellow-400";
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden"; // Desactiva el scroll
+    } else {
+      document.body.style.overflow = "unset"; // Reactiva el scroll
+    }
+
+    // Limpieza al desmontar el componente
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMenuOpen]);
 
   return (
-    <nav className="bg-gray-900 text-white p-4 fixed z-10 w-full">
+    <nav className="bg-gray-900 text-white top-0 p-4 fixed z-10 w-full">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
-        <NavLink to="/" className="text-3xl font-extrabold text-yellow-400">
+        <NavLink to="/" className="text-3xl font-extrabold text-white">
           ExpreStore
         </NavLink>
 
@@ -88,11 +100,16 @@ const Navbar = () => {
           </div>
         </div>
 
+        {/* Fondo borroso cuando el menú móvil está abierto */}
+        {isMenuOpen && (
+          <div className="fixed inset-0 bg-black opacity-50 backdrop-blur-md z-20"></div>
+        )}
+
         {/* Mobile menu */}
         <div
           className={`transform top-0 right-0 w-1/2 h-full fixed ${
             isMenuOpen ? "translate-x-0" : "translate-x-full"
-          } transition-transform duration-300 ease-in-out bg-gray-900 text-white p-4 overflow-y-auto md:hidden`}
+          } transition-transform duration-300 ease-in-out bg-gray-900 text-white p-4 overflow-y-hidden z-30 md:hidden`}
         >
           {/* Encabezado del menú móvil */}
           <div className="flex justify-end mb-4">

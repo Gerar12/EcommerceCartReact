@@ -1,5 +1,10 @@
+import Layout from "../../Layout";
 const MyOrder = () => {
-  return <h1 className="text-3xl">MyOrder Page</h1>;
+  return (
+    <Layout>
+      <h1 className="text-3xl">MyOrder Page</h1>
+    </Layout>
+  );
 };
 
 export default MyOrder;
