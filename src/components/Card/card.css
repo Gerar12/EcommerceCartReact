@@ -13,3 +13,8 @@
 .card-enter {
   animation: fadeIn 0.5s forwards;
 }
+
+.product-image {
+  width: 400px;
+  height: 400px;
+}

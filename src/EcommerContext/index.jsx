@@ -1,13 +1,18 @@
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 import PropTypes from "prop-types";
+import fetchProducts from "./logic/api";
 
 const EcommerContext = createContext();
 
 const EcommerProviner = ({ children }) => {
-  const [navbarActi, setNavbarActi] = useState(false);
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    fetchProducts(setItems);
+  }, []);
 
   return (
-    <EcommerContext.Provider value={{ navbarActi, setNavbarActi }}>
+    <EcommerContext.Provider value={{ items }}>
       {children}
     </EcommerContext.Provider>
   );

@@ -1,5 +1,6 @@
 import Card from "../../components/Card";
 import Layout from "../../Layout";
+
 const Home = () => {
   return (
     <>
@@ -7,22 +8,6 @@ const Home = () => {
         All Products
       </h1>
       <Layout>
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
         <Card />
       </Layout>
     </>
