@@ -6,13 +6,14 @@ const EcommerContext = createContext();
 
 const EcommerProviner = ({ children }) => {
   const [items, setItems] = useState([]);
+  const [countCart, setCounCart] = useState(0);
 
   useEffect(() => {
     fetchProducts(setItems);
   }, []);
 
   return (
-    <EcommerContext.Provider value={{ items }}>
+    <EcommerContext.Provider value={{ items, setCounCart, countCart }}>
       {children}
     </EcommerContext.Provider>
   );

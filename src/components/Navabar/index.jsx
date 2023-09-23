@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { EcommerContext } from "../../EcommerContext";
 import {
   FaShoppingCart,
   FaBars,
@@ -15,6 +16,7 @@ import {
 import "./navbar.css";
 
 const Navbar = () => {
+  const { countCart } = useContext(EcommerContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const activeStyle = "underline underline-offset-4 text-yellow-400";
   useEffect(() => {
@@ -96,7 +98,7 @@ const Navbar = () => {
           </NavLink>
           <div className="flex items-center space-x-1">
             <FaShoppingCart />
-            <span>0</span>
+            <span>{countCart}</span>
           </div>
         </div>
 
@@ -174,7 +176,7 @@ const Navbar = () => {
             <div className="font-bold mt-4">@user</div>
             <div className="flex items-center space-x-2 mt-4">
               <FaShoppingCart className="mr-2" />
-              <span>0</span>
+              <span>{countCart}</span>
             </div>
           </div>
         </div>

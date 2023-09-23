@@ -1,11 +1,7 @@
 import PropTypes from "prop-types";
 
 const Layout = ({ children }) => {
-  return (
-    <div className="flex flex-wrap mt-5 gap-5 justify-center p-3">
-      {children}
-    </div>
-  );
+  return <div className="container mt-5 p-3  m-auto">{children}</div>;
 };
 
 Layout.propTypes = {

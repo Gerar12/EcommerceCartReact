@@ -8,7 +8,9 @@ const Home = () => {
         All Products
       </h1>
       <Layout>
-        <Card />
+        <div className="flex flex-wrap gap-4  ">
+          <Card />
+        </div>
       </Layout>
     </>
   );
