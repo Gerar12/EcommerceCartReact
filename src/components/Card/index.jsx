@@ -4,17 +4,36 @@ import { EcommerContext } from "../../EcommerContext";
 import "./card.css";
 
 const Card = () => {
-  const { items, setCounCart, countCart } = useContext(EcommerContext);
+  const {
+    items,
+    setCounCart,
+    countCart,
+    setModalOpen,
+    setSelectedItem,
+    myOrder,
+    setNyOrder,
+  } = useContext(EcommerContext);
+
+  const existCart = (item) => {
+    if (!myOrder.some((existingItem) => existingItem.id === item.id)) {
+      setNyOrder([item, ...myOrder]);
+      setCounCart(countCart + 1);
+    }
+  };
+
+  const infoItemOpen = (item) => {
+    setSelectedItem(item);
+    setModalOpen(true);
+  };
 
   return (
     <>
       {items
-        .filter((item) => !item.title.includes("newProduct")) // Esto filtra los items cuyo título no incluye 'newProduct'
+        .filter((item) => !item.title.includes("newProduct"))
         .map((item) => (
-          // El resto del código sigue igual...
           <div
             key={item.id}
-            className="card rounded-lg overflow-hidden bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out transform hover:-translate-y-1 card-enter max-h-full w-40 items-center m-auto"
+            className="card rounded-lg overflow-hidden bg-gray-900 shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out transform hover:-translate-y-1 card-enter max-h-full w-40 items-center m-auto"
           >
             <figure className="relative">
               <img
@@ -24,20 +43,30 @@ const Card = () => {
               />
               <div className="card-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ease-in-out">
                 <FaShoppingCart
-                  className="text-3xl text-yellow-400 cursor-pointer"
+                  className="text-3xl text-blue-400 cursor-pointer"
                   onClick={() => {
-                    setCounCart(countCart + 1);
+                    existCart(item);
                   }}
                 />
               </div>
             </figure>
             <div className="p-4">
-              <p className="text-white font-semibold text-lg mb-2">
+              <p className="text-gray-200 font-semibold text-lg mb-2">
                 {item.title.length > 8
                   ? item.title.substring(0, 10) + "..."
                   : item.title}
               </p>
-              <p className="text-yellow-400 font-bold text-xl">${item.price}</p>
+              <p className="text-blue-400 font-bold text-xl mb-2">
+                ${item.price}
+              </p>
+              <button
+                className="text-white bg-gradient-to-r from-blue-500 to-blue-600 py-1 px-4 rounded-md font-semibold shadow-md hover:shadow-lg transition-shadow duration-300 transform hover:-translate-y-1 hover:scale-105"
+                onClick={() => {
+                  infoItemOpen(item);
+                }}
+              >
+                Information
+              </button>
             </div>
           </div>
         ))}

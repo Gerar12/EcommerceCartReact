@@ -18,7 +18,7 @@ import "./navbar.css";
 const Navbar = () => {
   const { countCart } = useContext(EcommerContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const activeStyle = "underline underline-offset-4 text-yellow-400";
+  const activeStyle = "underline underline-offset-4 text-blue-400";
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden"; // Desactiva el scroll
@@ -37,7 +37,8 @@ const Navbar = () => {
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
         <NavLink to="/" className="text-3xl font-extrabold text-white">
-          ExpreStore
+          <span className="text-blue-700">E</span>xpre
+          <span className="text-blue-700">S</span>tore
         </NavLink>
 
         {/* Mobile menu toggle button */}
@@ -63,7 +64,7 @@ const Navbar = () => {
               className={({ isActive }) => {
                 return isActive
                   ? activeStyle
-                  : "text-white hover:text-yellow-400";
+                  : "text-white hover:text-blue-400";
               }}
             >
               {path === "/" ? "All" : path.slice(1)}
@@ -73,15 +74,13 @@ const Navbar = () => {
 
         {/* User links and cart (right for desktop) */}
         <div className="hidden md:flex md:space-x-4">
-          <NavLink to="/" className="font-bold hover:text-yellow-400">
+          <NavLink to="/" className="font-bold hover:text-blue-400">
             @user
           </NavLink>
           <NavLink
             to="/my-orders"
             className={({ isActive }) => {
-              return isActive
-                ? activeStyle
-                : "text-white hover:text-yellow-400";
+              return isActive ? activeStyle : "text-white hover:text-blue-400";
             }}
           >
             My Orders
@@ -89,17 +88,18 @@ const Navbar = () => {
           <NavLink
             to="/sign-in"
             className={({ isActive }) => {
-              return isActive
-                ? activeStyle
-                : "text-white hover:text-yellow-400";
+              return isActive ? activeStyle : "text-white hover:text-blue-500";
             }}
           >
             Sign In
           </NavLink>
-          <div className="flex items-center space-x-1">
+          <NavLink
+            to="/my-order"
+            className="flex items-center space-x-1 cursor-pointer"
+          >
             <FaShoppingCart />
             <span>{countCart}</span>
-          </div>
+          </NavLink>
         </div>
 
         {/* Fondo borroso cuando el menú móvil está abierto */}
@@ -162,11 +162,12 @@ const Navbar = () => {
             ].map(({ path, label, icon }) => (
               <NavLink
                 key={path}
+                onClick={() => setIsMenuOpen(false)}
                 to={path}
                 className={({ isActive }) => {
                   return isActive
                     ? `${activeStyle} flex items-center`
-                    : "text-white hover:text-yellow-400 flex items-center";
+                    : "text-white hover:text-blue-600 flex items-center";
                 }}
               >
                 {icon}
@@ -174,10 +175,14 @@ const Navbar = () => {
               </NavLink>
             ))}
             <div className="font-bold mt-4">@user</div>
-            <div className="flex items-center space-x-2 mt-4">
-              <FaShoppingCart className="mr-2" />
+            <NavLink
+              to="/my-order"
+              className="flex items-center space-x-1 cursor-pointer"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <FaShoppingCart />
               <span>{countCart}</span>
-            </div>
+            </NavLink>
           </div>
         </div>
       </div>

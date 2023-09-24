@@ -1,6 +1,8 @@
 import { BrowserRouter } from "react-router-dom";
 import AppRouters from "../Routers/AppRouters";
 import Navbar from "../components/Navabar";
+import InfoItem from "../InfoItem";
+import MessegeModal from "../MessegeModal";
 
 const AppUI = () => {
   return (
@@ -8,6 +10,8 @@ const AppUI = () => {
       <BrowserRouter>
         <AppRouters />
         <Navbar />
+        <InfoItem />
+        <MessegeModal />
       </BrowserRouter>
     </>
   );
