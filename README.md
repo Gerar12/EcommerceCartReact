@@ -12,7 +12,7 @@ ExpreStore es un proyecto personal creado para práctica y mejoramiento de habil
 - ✏️ Operaciones CRUD para gestionar productos.
 - 💾 Almacenamiento persistente con `localStorage`.
 
-🖥️ [Demo en vivo](#) (https://651240c75978741d855a6d69--quiet-sunflower-b3c570.netlify.app/my-order)
+🖥️ [Demo en vivo](#) (https://quiet-sunflower-b3c570.netlify.app/)
 
 ## Tecnologías 🛠️
 
