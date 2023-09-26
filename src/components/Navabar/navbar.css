@@ -18,3 +18,25 @@ nav {
     transform: translateX(0) !important;
   }
 }
+
+/* Estilizar la barra de desplazamiento */
+.max-h-80::-webkit-scrollbar {
+  width: 10px; /* Anchura de la barra */
+}
+
+/* Track (la pista o raíl de la barra) */
+.max-h-80::-webkit-scrollbar-track {
+  background: #2a2a2a; /* Color de fondo del raíl */
+}
+
+/* Handle (la barra en sí) */
+.max-h-80::-webkit-scrollbar-thumb {
+  background-color: #555; /* Color de fondo de la barra */
+  border-radius: 5px; /* Hacer los bordes redondeados */
+  border: 2px solid #2a2a2a; /* Borde alrededor de la barra para que se distinga del fondo */
+}
+
+/* Handle en hover (cuando pasas el mouse por encima) */
+.max-h-80::-webkit-scrollbar-thumb:hover {
+  background-color: #777;
+}

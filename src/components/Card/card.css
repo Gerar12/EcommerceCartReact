@@ -18,3 +18,31 @@
   width: 400px;
   height: 400px;
 }
+
+button::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background-color: white;
+  transition: all 0.3s;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+button:hover::before {
+  width: 100%;
+}
+
+@keyframes fillHeart {
+  0% {
+    fill: white;
+  }
+  100% {
+    fill: #f87171; /* Color rojo que corresponde a text-red-500 en Tailwind */
+  }
+}
+
+.heart-animation {
+  animation: fillHeart 0.4s forwards;
+}

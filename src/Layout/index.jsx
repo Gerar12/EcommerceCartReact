@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
 
 const Layout = ({ children }) => {
-  return <div className="container mt-5 p-3  m-auto">{children}</div>;
+  return (
+    <div className="md:container md:mt-5 md:p-3  md:m-auto">{children}</div>
+  );
 };
 
 Layout.propTypes = {

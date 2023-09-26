@@ -1,6 +1,7 @@
-import { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { EcommerContext } from "../../EcommerContext";
+
 import {
   FaShoppingCart,
   FaBars,
@@ -11,26 +12,14 @@ import {
   FaGamepad,
   FaBoxOpen,
   FaClipboardList,
-  FaSignInAlt,
 } from "react-icons/fa";
 import "./navbar.css";
 
 const Navbar = () => {
-  const { countCart } = useContext(EcommerContext);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const activeStyle = "underline underline-offset-4 text-blue-400";
-  useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = "hidden"; // Desactiva el scroll
-    } else {
-      document.body.style.overflow = "unset"; // Reactiva el scroll
-    }
+  const { countCart, setIsMenuOpen, isMenuOpen, newCategory } =
+    useContext(EcommerContext);
 
-    // Limpieza al desmontar el componente
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isMenuOpen]);
+  const activeStyle = "underline underline-offset-4 text-blue-400";
 
   return (
     <nav className="bg-gray-900 text-white top-0 p-4 fixed z-10 w-full">
@@ -50,49 +39,39 @@ const Navbar = () => {
 
         {/* Links (centered for desktop) */}
         <div className="hidden md:flex md:space-x-4">
-          {[
-            "/",
-            "/clothes",
-            "/tegnology",
-            "/fornitures",
-            "/toys",
-            "/orthers",
-          ].map((path) => (
-            <NavLink
-              key={path}
-              to={path}
-              className={({ isActive }) => {
-                return isActive
-                  ? activeStyle
-                  : "text-white hover:text-blue-400";
-              }}
-            >
-              {path === "/" ? "All" : path.slice(1)}
-            </NavLink>
-          ))}
-        </div>
-
-        {/* User links and cart (right for desktop) */}
-        <div className="hidden md:flex md:space-x-4">
-          <NavLink to="/" className="font-bold hover:text-blue-400">
-            @user
-          </NavLink>
           <NavLink
-            to="/my-orders"
+            to="/"
+            onClick={newCategory}
             className={({ isActive }) => {
               return isActive ? activeStyle : "text-white hover:text-blue-400";
             }}
           >
-            My Orders
+            All
           </NavLink>
-          <NavLink
-            to="/sign-in"
-            className={({ isActive }) => {
-              return isActive ? activeStyle : "text-white hover:text-blue-500";
-            }}
-          >
-            Sign In
-          </NavLink>
+          {["/clothes", "/electronics", "/furniture", "/shoes", "/others"].map(
+            (path, index) => (
+              <NavLink
+                key={path}
+                to={path}
+                value={index + 1}
+                className={({ isActive }) => {
+                  return isActive
+                    ? activeStyle
+                    : "text-white hover:text-blue-400";
+                }}
+                onClick={newCategory}
+              >
+                {path === "/" ? "All" : path.slice(1)}
+              </NavLink>
+            )
+          )}
+        </div>
+
+        {/* User links and cart (right for desktop) */}
+        <div className="hidden md:flex md:space-x-4">
+          <NavLink to="/">@user</NavLink>
+          <NavLink to="/my-orders">My Orders</NavLink>
+
           <NavLink
             to="/my-order"
             className="flex items-center space-x-1 cursor-pointer"
@@ -122,31 +101,42 @@ const Navbar = () => {
 
           {/* Links para móvil */}
           <div className="flex flex-col space-y-6">
+            <NavLink
+              to="/"
+              onClick={newCategory}
+              className={({ isActive }) => {
+                return isActive
+                  ? activeStyle
+                  : "text-white hover:text-blue-400";
+              }}
+            >
+              <FaBoxOpen className="mr-2 inline" />
+              All
+            </NavLink>
             {[
-              { path: "/", label: "All", icon: <FaBoxOpen className="mr-2" /> },
               {
                 path: "/clothes",
                 label: "Clothes",
                 icon: <FaTshirt className="mr-2" />,
               },
               {
-                path: "/tegnology",
-                label: "Tegnology",
+                path: "/electronics",
+                label: "Electronics",
                 icon: <FaLaptop className="mr-2" />,
               },
               {
-                path: "/fornitures",
-                label: "Fornitures",
+                path: "/Furniture",
+                label: "furniture",
                 icon: <FaCouch className="mr-2" />,
               },
               {
-                path: "/toys",
-                label: "Toys",
+                path: "/shoes",
+                label: "shoes",
                 icon: <FaGamepad className="mr-2" />,
               },
               {
-                path: "/orthers",
-                label: "Orthers",
+                path: "/others",
+                label: "others",
                 icon: <FaBoxOpen className="mr-2" />,
               },
               {
@@ -154,16 +144,12 @@ const Navbar = () => {
                 label: "My Orders",
                 icon: <FaClipboardList className="mr-2" />,
               },
-              {
-                path: "/sign-in",
-                label: "Sign In",
-                icon: <FaSignInAlt className="mr-2" />,
-              },
-            ].map(({ path, label, icon }) => (
+            ].map(({ path, label, icon }, index) => (
               <NavLink
                 key={path}
-                onClick={() => setIsMenuOpen(false)}
+                onClick={newCategory}
                 to={path}
+                value={index + 1}
                 className={({ isActive }) => {
                   return isActive
                     ? `${activeStyle} flex items-center`

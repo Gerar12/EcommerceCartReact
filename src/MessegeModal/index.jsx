@@ -8,7 +8,7 @@ const MessegeModal = () => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed top-4 right-4 z-50">
+    <div className="fixed bottom-10 right-4 z-50">
       <div className="bg-blue-900 text-blue-100 p-2 rounded-lg shadow-md w-48 flex items-center">
         <AiOutlineCheckCircle className="text-xl mr-2" />
         <h2 className="text-sm font-medium flex-grow truncate">{message}</h2>

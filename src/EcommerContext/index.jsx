@@ -1,19 +1,59 @@
 import { useState, createContext, useEffect } from "react";
 import PropTypes from "prop-types";
-import fetchProducts from "./logic/api";
-
+import { fetchProducts, fetchForCategory } from "./logic/api";
+import useLocalStorage from "./useLocalStorage";
 const EcommerContext = createContext();
+
 const EcommerProviner = ({ children }) => {
   const [items, setItems] = useState([]);
-  const [countCart, setCounCart] = useState(0);
+
+  const [itemResult, setItemResult] = useState([]);
+  const { value: countCart, setValue: setCounCart } = useLocalStorage(
+    "countCart",
+    0
+  );
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState({});
-  const [myOrder, setNyOrder] = useState([]);
+  const { value: myOrder, setValue: setNyOrder } = useLocalStorage(
+    "myOrder",
+    []
+  );
+  const { value: allOrders, setValue: setAllOrders } = useLocalStorage(
+    "myOrders",
+    []
+  );
+  const [myOrderEnd, setMyOrderEnd] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [previousCount, setPreviousCount] = useState(countCart);
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [sumPrice, setSumPrice] = useState(0);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentProcessed, setPaymentProcessed] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+
+  const serchItem = (e) => {
+    setInputValue(e.target.value);
+    const result = items.filter((item) =>
+      item.title.toLowerCase().includes(inputValue.toLocaleLowerCase())
+    );
+    setItemResult(result);
+  };
+
+  useEffect(() => {
+    if (myOrderEnd.length > 0) {
+      const myOrderAll = {
+        date: new Date().toLocaleString(),
+        items: myOrderEnd.length,
+        total: sumPrice,
+        user: `@yourName`,
+        id: Date.now(),
+      };
+      setAllOrders([myOrderAll, ...allOrders]);
+      console.log(allOrders);
+    }
+  }, [myOrderEnd]);
 
   useEffect(() => {
     const total = myOrder.reduce((acc, item) => acc + item.price, 0);
@@ -25,18 +65,24 @@ const EcommerProviner = ({ children }) => {
   }, [myOrder]);
 
   useEffect(() => {
+    // Actualizar el previousCount al principio.
+    setPreviousCount(countCart);
+
+    // Evitar la ejecución en el primer renderizado
     if (isFirstRender) {
       setIsFirstRender(false);
       return;
     }
 
-    if (previousCount < countCart) {
-      setMessage("Added to cart");
-    } else if (previousCount > countCart) {
+    // Establecer el mensaje basado en las condiciones
+    if (previousCount > countCart) {
       setMessage("Deleted");
+    } else if (previousCount < countCart) {
+      setMessage("Added to cart");
+    } else if (paymentProcessed) {
+      setMessage("Payment successful!");
+      setPaymentProcessed(false);
     }
-
-    setPreviousCount(countCart);
 
     if (message) {
       setIsOpen(true);
@@ -44,24 +90,48 @@ const EcommerProviner = ({ children }) => {
         setIsOpen(false);
       }, 1500);
     }
-  }, [countCart, isFirstRender, previousCount, message]);
-
+  }, [countCart, isFirstRender, previousCount, message, paymentProcessed]);
   useEffect(() => {
     fetchProducts(setItems);
   }, []);
 
   useEffect(() => {
-    if (modalOpen) {
-      document.body.style.overflow = "hidden"; // Desactiva el scroll
+    setItemResult(items);
+  }, [items]);
+
+  useEffect(() => {
+    if (modalOpen || isMenuOpen) {
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "unset"; // Reactiva el scroll
+      document.body.style.overflow = "unset";
     }
 
     // Limpieza al desmontar el componente
     return () => {
       document.body.style.overflow = "unset";
     };
-  }, [modalOpen]);
+  }, [modalOpen, isMenuOpen]);
+
+  const addMyOrdersPays = () => {
+    setIsProcessing(true);
+    setTimeout(() => {
+      setMyOrderEnd([...myOrderEnd, ...myOrder]);
+      setCounCart(0);
+      setNyOrder([]);
+      setPaymentProcessed(true);
+      setIsProcessing(false);
+    }, 5000);
+  };
+
+  const newCategory = (e) => {
+    setIsMenuOpen(false);
+    let category = Number(e.currentTarget.getAttribute("value"));
+    if (category <= 0) {
+      fetchProducts(setItems);
+    } else {
+      fetchForCategory(setItems, category);
+    }
+  };
 
   return (
     <EcommerContext.Provider
@@ -79,6 +149,17 @@ const EcommerProviner = ({ children }) => {
         setIsOpen,
         message,
         sumPrice,
+        addMyOrdersPays,
+        myOrderEnd,
+        setMyOrderEnd,
+        setIsProcessing,
+        isProcessing,
+        isMenuOpen,
+        setIsMenuOpen,
+        allOrders,
+        serchItem,
+        itemResult,
+        newCategory,
       }}
     >
       {children}
