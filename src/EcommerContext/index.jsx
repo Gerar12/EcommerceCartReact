@@ -22,6 +22,12 @@ const EcommerProviner = ({ children }) => {
     "myOrders",
     []
   );
+
+  const { value: acount, setValue: setAcount } = useLocalStorage(
+    "Loginacount",
+    {}
+  );
+
   const [myOrderEnd, setMyOrderEnd] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -32,6 +38,7 @@ const EcommerProviner = ({ children }) => {
   const [paymentProcessed, setPaymentProcessed] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const { value: login, setValue: setLogin } = useLocalStorage("login", false);
 
   const serchItem = (e) => {
     setInputValue(e.target.value);
@@ -42,53 +49,63 @@ const EcommerProviner = ({ children }) => {
   };
 
   useEffect(() => {
-    if (myOrderEnd.length > 0) {
-      const myOrderAll = {
-        date: new Date().toLocaleString(),
-        items: myOrderEnd.length,
-        total: sumPrice,
-        user: `@yourName`,
-        id: Date.now(),
-      };
-      setAllOrders([myOrderAll, ...allOrders]);
-      console.log(allOrders);
+    console.log(login);
+  }, [login]);
+
+  useEffect(() => {
+    if (login) {
+      if (myOrderEnd.length > 0) {
+        const myOrderAll = {
+          date: new Date().toLocaleString(),
+          items: myOrderEnd.length,
+          total: sumPrice,
+          user: acount.userName,
+          id: Date.now(),
+        };
+        setAllOrders([myOrderAll, ...allOrders]);
+        console.log(allOrders);
+      }
     }
   }, [myOrderEnd]);
 
   useEffect(() => {
-    const total = myOrder.reduce((acc, item) => acc + item.price, 0);
-    const formattedTotal = total.toLocaleString("en-US", {
-      style: "currency",
-      currency: "USD",
-    });
-    setSumPrice(formattedTotal);
+    if (login) {
+      const total = myOrder.reduce((acc, item) => acc + item.price, 0);
+      const formattedTotal = total.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+      });
+      setSumPrice(formattedTotal);
+    }
   }, [myOrder]);
 
   useEffect(() => {
-    // Actualizar el previousCount al principio.
-    setPreviousCount(countCart);
+    if (login) {
+      // Actualizar el previousCount al principio.
+      setPreviousCount(countCart);
 
-    // Evitar la ejecución en el primer renderizado
-    if (isFirstRender) {
-      setIsFirstRender(false);
-      return;
-    }
+      // Evitar la ejecución en el primer renderizado
+      if (isFirstRender) {
+        setIsFirstRender(false);
+        return;
+      }
 
-    // Establecer el mensaje basado en las condiciones
-    if (previousCount > countCart) {
-      setMessage("Deleted");
-    } else if (previousCount < countCart) {
-      setMessage("Added to cart");
-    } else if (paymentProcessed) {
-      setMessage("Payment successful!");
-      setPaymentProcessed(false);
-    }
+      // Establecer el mensaje basado en las condiciones
+      if (previousCount > countCart) {
+        setMessage("Deleted");
+      } else if (previousCount < countCart) {
+        setMessage("Added to cart");
+      } else if (paymentProcessed) {
+        setMessage("Payment successful!");
+        setPaymentProcessed(false);
+      }
 
-    if (message) {
-      setIsOpen(true);
-      setTimeout(() => {
-        setIsOpen(false);
-      }, 1500);
+      if (message) {
+        setIsOpen(true);
+        setTimeout(() => {
+          setIsOpen(false);
+        }, 1500);
+      }
     }
   }, [countCart, isFirstRender, previousCount, message, paymentProcessed]);
   useEffect(() => {
@@ -113,14 +130,16 @@ const EcommerProviner = ({ children }) => {
   }, [modalOpen, isMenuOpen]);
 
   const addMyOrdersPays = () => {
-    setIsProcessing(true);
-    setTimeout(() => {
-      setMyOrderEnd([...myOrderEnd, ...myOrder]);
-      setCounCart(0);
-      setNyOrder([]);
-      setPaymentProcessed(true);
-      setIsProcessing(false);
-    }, 5000);
+    if (login) {
+      setIsProcessing(true);
+      setTimeout(() => {
+        setMyOrderEnd([...myOrderEnd, ...myOrder]);
+        setCounCart(0);
+        setNyOrder([]);
+        setPaymentProcessed(true);
+        setIsProcessing(false);
+      }, 5000);
+    }
   };
 
   const newCategory = (e) => {
@@ -160,6 +179,10 @@ const EcommerProviner = ({ children }) => {
         serchItem,
         itemResult,
         newCategory,
+        acount,
+        setAcount,
+        login,
+        setLogin,
       }}
     >
       {children}

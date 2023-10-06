@@ -13,6 +13,7 @@ const InfoItem = () => {
     countCart,
     setNyOrder,
     myOrder,
+    login,
   } = useContext(EcommerContext);
   const [animation, setAnimation] = useState("modal-animation-enter");
 
@@ -76,13 +77,15 @@ const InfoItem = () => {
             ${price}
           </span>
 
-          <button
-            className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-500 rounded-md hover:bg-blue-600 transition-colors duration-300"
-            onClick={addCard}
-          >
-            <FaShoppingCart />
-            Add to Cart
-          </button>
+          {login ? (
+            <button
+              className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-500 rounded-md hover:bg-blue-600 transition-colors duration-300"
+              onClick={addCard}
+            >
+              <FaShoppingCart />
+              Add to Cart
+            </button>
+          ) : null}
         </div>
       </div>
     </div>

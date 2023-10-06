@@ -1,11 +1,18 @@
 import Layout from "../../Layout";
 import { EcommerContext } from "../../EcommerContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { TbExternalLink } from "react-icons/tb";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaCalendar, FaCartPlus, FaDollarSign, FaUser } from "react-icons/fa";
 const MyOrders = () => {
-  const { allOrders } = useContext(EcommerContext);
+  const { allOrders, login } = useContext(EcommerContext);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!login) {
+      navigate("/sign-in"); // Asegúrate de ajustar la ruta según la que utilices para el inicio de sesión
+    }
+  }, [login, navigate]);
   return (
     <Layout>
       <h1 className="text-3xl mt-20 font-extrabold text-center">

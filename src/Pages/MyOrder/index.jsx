@@ -7,6 +7,8 @@ import RingLoader from "react-spinners/RingLoader";
 import { TbExternalLink } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import "./myorders.css";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const MyOrder = () => {
   const {
@@ -17,9 +19,19 @@ const MyOrder = () => {
     sumPrice,
     addMyOrdersPays,
     isProcessing,
+    login,
   } = useContext(EcommerContext);
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!login) {
+      navigate("/sign-in");
+    }
+  }, [login, navigate]);
+
   const fillterMyOrder = (item) => {
+    if (!login) return;
     setNyOrder((prevItems) =>
       prevItems.filter((element) => element.id !== item.id)
     );

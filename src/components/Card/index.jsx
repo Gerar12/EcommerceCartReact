@@ -1,4 +1,4 @@
-import { FaShoppingCart, FaHeart, FaTag } from "react-icons/fa";
+import { FaShoppingCart, FaHeart } from "react-icons/fa";
 import { useContext } from "react";
 import { EcommerContext } from "../../EcommerContext";
 import "./card.css";
@@ -12,12 +12,15 @@ const Card = () => {
     myOrder,
     setNyOrder,
     itemResult,
+    login,
   } = useContext(EcommerContext);
 
   const existCart = (item) => {
-    if (!myOrder.some((existingItem) => existingItem.id === item.id)) {
-      setNyOrder([item, ...myOrder]);
-      setCounCart(countCart + 1);
+    if (login) {
+      if (!myOrder.some((existingItem) => existingItem.id === item.id)) {
+        setNyOrder([item, ...myOrder]);
+        setCounCart(countCart + 1);
+      }
     }
   };
 
@@ -50,14 +53,16 @@ const Card = () => {
                   } hover:text-red-500`}
                 />
               </div>
-              <div className="card-overlay absolute inset-0 bg-transparent flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ease-in-out">
-                <FaShoppingCart
-                  className="text-4xl text-blue-500 cursor-pointer transform hover:scale-110 transition-transform duration-200"
-                  onClick={() => {
-                    existCart(item);
-                  }}
-                />
-              </div>
+              {login ? (
+                <div className="card-overlay absolute inset-0 bg-transparent flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                  <FaShoppingCart
+                    className="text-4xl text-blue-500 cursor-pointer transform hover:scale-110 transition-transform duration-200"
+                    onClick={() => {
+                      existCart(item);
+                    }}
+                  />
+                </div>
+              ) : null}
             </figure>
             <div className="p-5">
               <p className="text-gray-300 font-medium text-md mb-3 truncate">
@@ -65,7 +70,6 @@ const Card = () => {
               </p>
               <div className="flex items-center justify-between mb-4">
                 <p className="text-blue-500 font-bold text-lg">${item.price}</p>
-                <FaTag className="text-gray-400" />
               </div>
               <button
                 className="text-sm bg-gradient-to-r from-blue-700 to-blue-900 text-white py-2 px-4 rounded-md font-semibold shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"

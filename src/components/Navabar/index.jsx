@@ -12,11 +12,13 @@ import {
   FaGamepad,
   FaBoxOpen,
   FaClipboardList,
+  FaSignInAlt,
+  FaUser,
 } from "react-icons/fa";
 import "./navbar.css";
 
 const Navbar = () => {
-  const { countCart, setIsMenuOpen, isMenuOpen, newCategory } =
+  const { countCart, setIsMenuOpen, isMenuOpen, newCategory, login, acount } =
     useContext(EcommerContext);
 
   const activeStyle = "underline underline-offset-4 text-blue-400";
@@ -69,16 +71,34 @@ const Navbar = () => {
 
         {/* User links and cart (right for desktop) */}
         <div className="hidden md:flex md:space-x-4">
-          <NavLink to="/">@user</NavLink>
-          <NavLink to="/my-orders">My Orders</NavLink>
+          <>
+            {login ? (
+              <NavLink className={"font-bold"} to="/">
+                {acount.userName}
+              </NavLink>
+            ) : null}
+          </>
+          <>{login ? <NavLink to="/my-orders">My Orders</NavLink> : null}</>
 
           <NavLink
-            to="/my-order"
-            className="flex items-center space-x-1 cursor-pointer"
+            to={login ? "/my-account" : "/sign-in"}
+            className=" flex items-center gap-2 space-x-1 cursor-pointer font-bold transition-colors duration-300 hover:bg-blue-600"
           >
-            <FaShoppingCart />
-            <span>{countCart}</span>
+            {login ? <FaUser /> : <FaSignInAlt />}
+            {login ? "My Account" : "Login"}
           </NavLink>
+
+          <>
+            {login ? (
+              <NavLink
+                to="/my-order"
+                className="flex items-center space-x-1 cursor-pointer"
+              >
+                <FaShoppingCart />
+                <span>{countCart}</span>
+              </NavLink>
+            ) : null}
+          </>
         </div>
 
         {/* Fondo borroso cuando el menú móvil está abierto */}
@@ -139,11 +159,6 @@ const Navbar = () => {
                 label: "others",
                 icon: <FaBoxOpen className="mr-2" />,
               },
-              {
-                path: "/my-orders",
-                label: "My Orders",
-                icon: <FaClipboardList className="mr-2" />,
-              },
             ].map(({ path, label, icon }, index) => (
               <NavLink
                 key={path}
@@ -160,15 +175,44 @@ const Navbar = () => {
                 <span>{label}</span>
               </NavLink>
             ))}
-            <div className="font-bold mt-4">@user</div>
+            <>
+              {login ? (
+                <NavLink
+                  to="/my-orders"
+                  className="flex items-center space-x-1 gap-1 cursor-pointer"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <FaClipboardList />
+                  My Orders
+                </NavLink>
+              ) : null}
+            </>
+
+            <>
+              {login ? (
+                <div className="font-bold mt-4">@{acount.userName}</div>
+              ) : null}
+            </>
             <NavLink
-              to="/my-order"
-              className="flex items-center space-x-1 cursor-pointer"
+              to={login ? "/my-account" : "/sign-in"}
+              className="flex items-center space-x-1 gap-1 cursor-pointer"
               onClick={() => setIsMenuOpen(false)}
             >
-              <FaShoppingCart />
-              <span>{countCart}</span>
+              {login ? <FaUser /> : <FaSignInAlt />}
+              {login ? " My account" : " Login"}
             </NavLink>
+            <>
+              {login ? (
+                <NavLink
+                  to="/my-order"
+                  className="flex items-center space-x-1 cursor-pointer"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <FaShoppingCart />
+                  <span>{countCart}</span>
+                </NavLink>
+              ) : null}
+            </>
           </div>
         </div>
       </div>
